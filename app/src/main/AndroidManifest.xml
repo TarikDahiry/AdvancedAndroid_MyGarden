@@ -15,7 +15,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/plant_widget_provider_info" />
+                android:resource="@xml/plant_widget_info" />
         </receiver>
 
         <provider
