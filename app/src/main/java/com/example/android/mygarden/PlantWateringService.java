@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.example.android.mygarden.provider.PlantContract;
 import com.example.android.mygarden.utils.PlantUtils;
 
 import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
 import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 import static com.example.android.mygarden.provider.PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME;
-import static com.example.android.mygarden.provider.PlantContract.PlantEntry.CONTENT_URI;
 
 public class PlantWateringService extends IntentService {
     public static final String ACTION_WATER_PLANTS = "com.example.android.mygarden.action.water_plants";
@@ -33,14 +31,14 @@ public class PlantWateringService extends IntentService {
         //Uri PLANTS_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PLANTS);
         Uri PLANTS_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
         ContentValues values = new ContentValues();
-        long currentime = System.currentTimeMillis();
-        values.put(COLUMN_LAST_WATERED_TIME, currentime);
+        long currentTime = System.currentTimeMillis();
+        values.put(COLUMN_LAST_WATERED_TIME, currentTime);
         // Update only plants that are still alive
         getContentResolver().update(
                 PLANTS_URI,
                 values,
                 COLUMN_LAST_WATERED_TIME+">?",
-                new String[]{String.valueOf(currentime - PlantUtils.MAX_AGE_WITHOUT_WATER)});
+                new String[]{String.valueOf(currentTime - PlantUtils.MAX_AGE_WITHOUT_WATER)});
     }
 
     public static void startActionWaterPlants(Context context) {

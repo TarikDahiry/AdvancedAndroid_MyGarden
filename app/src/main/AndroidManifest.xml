@@ -24,8 +24,7 @@
             android:authorities="com.example.android.mygarden"
             android:exported="true" />
 
-        <service android:name=".PlantWateringService"
-            android:exported="false" />
+        <service android:name=".PlantWateringService" />
 
         <activity
             android:name=".ui.MainActivity"
