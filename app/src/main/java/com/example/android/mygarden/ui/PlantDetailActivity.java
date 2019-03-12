@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.mygarden.PlantWateringService;
 import com.example.android.mygarden.R;
 import com.example.android.mygarden.provider.PlantContract;
 import com.example.android.mygarden.utils.PlantUtils;
@@ -49,7 +51,7 @@ public class PlantDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_plant_detail);
         mPlantId = getIntent().getLongExtra(EXTRA_PLANT_ID, PlantContract.INVALID_PLANT_ID);
         // This activity displays single plant information that is loaded using a cursor loader
-        getSupportLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
+        LoaderManager.getInstance(this).initLoader(SINGLE_LOADER_ID, null, this);
     }
 
     public void onBackButtonClick(View view) {
@@ -73,8 +75,10 @@ public class PlantDetailActivity extends AppCompatActivity
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
         getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
         cursor.close();
+        PlantWateringService.startActionUpdatePlantWidgets(this);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
@@ -84,7 +88,7 @@ public class PlantDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         if (cursor == null || cursor.getCount() < 1) return;
         cursor.moveToFirst();
         int createTimeIndex = cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_CREATION_TIME);
@@ -117,7 +121,7 @@ public class PlantDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
     }
 
